@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+       <form method="get">
+
+           <label for="per_page">Постов на странице:</label>
+           <select name="per_page" id="per_page" onchange="this.form.submit()">
+               <option value="3" {% if per_page == '3' %}selected{% endif %}>3</option>
+               <option value="5" {% if per_page == '5' %}selected{% endif %}>5</option>
+               <option value="10" {% if per_page == '10' %}selected{% endif %}>10</option>
+           </select>
+           <input type="hidden" name="page" value="{{ page_posts.number }}">
+
+       </form>
+       <h4>Список постов:</h4>
+       <ul>
+           {% for post in page_posts %}
+               <li>{{ post.title }}: {{ post.content }} - {{ post.created_at }}</li>
+           {% endfor %}
+       </ul>
+
+
+    <p>Страницы:</p>
+
+    {% if page_posts.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="paginator">
+                {% if page_posts.has_previous %}
+                    <button onclick="goBack()">
+                        <a class="page-link" href="?page={{ page_posts.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">Предыдущая</span>
+                        </a>
+                    </button>
+                {% else %}
+                <button onclick="goBack()">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">Предыдущая</span>
+                    </a>
+                </button>
+                {% endif %}
+
+                {% for i in page_posts.paginator.page_range %}
+                    {% if page_posts.number == i %}
+                        <button onclick="goBack()">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </button>
+                    {% else %}
+                        <button onclick="goBack()">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </button>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_posts.has_next %}
+                    <button onclick="goBack()">
+                        <a href="?page={{ page_posts.next_page_number }}">Следующая></a>
+                    </button>
+                {% else %}
+                    <button onclick="goBack()">
+                        <a href="?page={{ paginator.num_pages }}">Следующая></a>
+                    </button>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+</body>
+</html>
+
